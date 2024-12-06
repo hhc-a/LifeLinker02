@@ -40,7 +40,6 @@ fun test(m: Modifier){
     var userName by remember { mutableStateOf("") }
     var msg by remember { mutableStateOf("") }
     val db = Firebase.firestore
-
     Column {
         TextField(
             value = userName,
