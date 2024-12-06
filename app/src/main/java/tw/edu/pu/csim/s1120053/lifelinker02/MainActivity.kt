@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun test(m: Modifier){
     var userName by remember { mutableStateOf("") }
