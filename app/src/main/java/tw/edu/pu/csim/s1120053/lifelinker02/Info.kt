@@ -218,7 +218,9 @@ fun Basic(modifier: Modifier) {
         ) {
             TextButton(
                 onClick = {
-                    activity.finish()
+//                    activity.finish()
+                    val intent = Intent(context, Option::class.java)
+                    context.startActivity(intent)
                 }
             ) {
                 Text(text = "回到主畫面")

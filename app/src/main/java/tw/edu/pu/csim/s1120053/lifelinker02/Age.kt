@@ -148,7 +148,10 @@ fun Age(modifier: Modifier) {
             verticalAlignment = Alignment.Bottom
         ) {
             TextButton(
-                onClick = { activity.finish() }
+                onClick = {
+                    val intent = Intent(context, Info::class.java)
+                    context.startActivity(intent)
+                }
             ) {
                 Text(text = "上一頁")
             }
