@@ -62,53 +62,53 @@ class Repair : ComponentActivity() {
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun kindDropdown(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val kindOptions = listOf("輪椅", "助行器","拐杖")
-    var selectedKind by remember { mutableStateOf(kindOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        TextField(
-            value = selectedKind,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*借用輔具") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor().fillMaxWidth()
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            kindOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedKind = option
-                        expanded = false
-                        selectedKind(option)
-                        onSaveToFirebase(option)
-                    }
-                )
-            }
-        }
-    }
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun kindDropdown(
+//    selectedKind: (String) -> Unit,
+//    onSaveToFirebase: (String) -> Unit = {}
+//) {
+//    val kindOptions = listOf("輪椅", "助行器","拐杖")
+//    var selectedKind by remember { mutableStateOf(kindOptions.first()) }
+//    var expanded by remember { mutableStateOf(false) }
+//    ExposedDropdownMenuBox(
+//        expanded = expanded,
+//        onExpandedChange = { expanded = !expanded }
+//    ) {
+//        TextField(
+//            value = selectedKind,
+//            onValueChange = {},
+//            readOnly = true,
+//            label = { Text("*借用輔具") },
+//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+//            modifier = Modifier.menuAnchor().fillMaxWidth()
+//        )
+//
+//        ExposedDropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            kindOptions.forEach { option ->
+//                DropdownMenuItem(
+//                    text = { Text(option) },
+//                    onClick = {
+//                        selectedKind = option
+//                        expanded = false
+//                        selectedKind(option)
+//                        onSaveToFirebase(option)
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
 @Composable
 fun repair(modifier: Modifier) {
-    var kind by remember { mutableStateOf("") }
-    var selectedKind by remember { mutableStateOf("") }
-    var describe by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("") }
+    var devices by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
+    var describe by remember { mutableStateOf("") }
     val context = LocalContext.current
     val db = FirebaseFirestore.getInstance()
 //    val activity = (context as Activity)
@@ -147,9 +147,23 @@ fun repair(modifier: Modifier) {
                     color = Color.Red
                 )
             )
-            kindDropdown(
-                selectedKind = { selectedKind -> kind = selectedKind },
-                onSaveToFirebase = saveToFirebase)
+//            kindDropdown(
+//                selectedKind = { selectedKind -> kind = selectedKind },
+//                onSaveToFirebase = saveToFirebase)
+            TextField(
+                value = userName,
+                onValueChange = { newText -> userName = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*使用者姓名") },
+                placeholder = { Text("請輸入使用者姓名") }
+            )
+            TextField(
+                value = devices,
+                onValueChange = { newText -> devices = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("您所租借之輔具") },
+                placeholder = { Text("輪椅/助行器/拐杖") }
+            )
             TextField(
                 value = date,
                 onValueChange = { newText -> date = newText },
@@ -174,15 +188,17 @@ fun repair(modifier: Modifier) {
         ) {
             TextButton(
                 onClick = {
-                    val Repair = rep(
+                    val repair = rep(
+                        userName = userName,
+                        devices = devices,
                         describe = describe,
                         date = date,
 //                        "timestamp" to FieldValue.serverTimestamp()
                     )
                     db.collection("repair0")
 //                   .add(user)
-                        .document(describe)
-                        .set(describe)
+                        .document(userName)
+                        .set(repair)
                         .addOnSuccessListener {
                             val intent = Intent(context, Option()::class.java)
                             context.startActivity(intent)
@@ -199,6 +215,8 @@ fun repair(modifier: Modifier) {
     }
 }
 data class rep(
+    var userName: String,
+    var devices:String,
     var describe: String,
     var date: String,
 )

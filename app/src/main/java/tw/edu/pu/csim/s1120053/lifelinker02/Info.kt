@@ -55,92 +55,93 @@ class Info : ComponentActivity() {
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EconomicDropdown(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val economicOptions = listOf("一般", "低收", "中低收", "身障")
-    var selectedEconomic by remember { mutableStateOf(economicOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            value = selectedEconomic,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*經濟別") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            economicOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedEconomic = option
-                        expanded = false
-                        selectedKind(option) // 呼叫傳入的回調函數
-                        onSaveToFirebase(option)// 儲存到 Firebase
-                    }
-                )
-            }
-        }
-    }
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Disability(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val economicOptions = listOf("無證明", "有證明")
-    var selectedDisable by remember { mutableStateOf(economicOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            value = selectedDisable,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*身障資格") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            economicOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedDisable = option
-                        expanded = false
-                        selectedKind(option) // 呼叫傳入的回調函數
-                        onSaveToFirebase(option)// 儲存到 Firebase
-                    }
-                )
-            }
-        }
-    }
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun EconomicDropdown(
+//    selectedKind: (String) -> Unit,
+//    onSaveToFirebase: (String) -> Unit = {}
+//) {
+//    val economicOptions = listOf("一般", "低收", "中低收", "身障")
+//    var selectedEconomic by remember { mutableStateOf(economicOptions.first()) }
+//    var expanded by remember { mutableStateOf(false) }
+//    ExposedDropdownMenuBox(
+//        expanded = expanded,
+//        onExpandedChange = { expanded = !expanded },
+//    ) {
+//        TextField(
+//            value = selectedEconomic,
+//            onValueChange = {},
+//            readOnly = true,
+//            label = { Text("*經濟別") },
+//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+//            modifier = Modifier
+//                .menuAnchor()
+//                .fillMaxWidth()
+//        )
+//        ExposedDropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            economicOptions.forEach { option ->
+//                DropdownMenuItem(
+//                    text = { Text(option) },
+//                    onClick = {
+//                        selectedEconomic = option
+//                        expanded = false
+//                        selectedKind(option) // 呼叫傳入的回調函數
+//                        onSaveToFirebase(option)// 儲存到 Firebase
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Disability(
+//    selectedKind: (String) -> Unit,
+//    onSaveToFirebase: (String) -> Unit = {}
+//) {
+//    val economicOptions = listOf("無證明", "有證明")
+//    var selectedDisable by remember { mutableStateOf(economicOptions.first()) }
+//    var expanded by remember { mutableStateOf(false) }
+//    ExposedDropdownMenuBox(
+//        expanded = expanded,
+//        onExpandedChange = { expanded = !expanded },
+//    ) {
+//        TextField(
+//            value = selectedDisable,
+//            onValueChange = {},
+//            readOnly = true,
+//            label = { Text("*身障資格") },
+//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+//            modifier = Modifier
+//                .menuAnchor()
+//                .fillMaxWidth()
+//        )
+//        ExposedDropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            economicOptions.forEach { option ->
+//                DropdownMenuItem(
+//                    text = { Text(option) },
+//                    onClick = {
+//                        selectedDisable = option
+//                        expanded = false
+//                        selectedKind(option) // 呼叫傳入的回調函數
+//                        onSaveToFirebase(option)// 儲存到 Firebase
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
 @Composable  //3基本資料
 fun Basic(modifier: Modifier) {
+    var devices by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
     var userTel by remember { mutableStateOf("") }
     var userID by remember { mutableStateOf("") }
@@ -194,62 +195,71 @@ fun Basic(modifier: Modifier) {
             )
             TextField(
                 value = userName,
-                onValueChange = { newText ->
-                    userName = newText
-                },
+                onValueChange = { newText -> userName = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*使用者姓名") },
                 placeholder = { Text("請輸入使用者姓名") }
             )
             TextField(
+                value = devices,
+                onValueChange = { newText -> devices = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*需租借之輔具") },
+                placeholder = { Text("輪椅/助行器/拐杖") }
+            )
+            TextField(
                 value = userTel,
-                onValueChange = { newText ->
-                    userTel = newText
-                },
+                onValueChange = { newText -> userTel = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*使用者電話") },
                 placeholder = { Text("請輸入使用者電話") }
             )
             TextField(
                 value = userID,
-                onValueChange = { newText ->
-                    userID = newText
-                },
+                onValueChange = { newText -> userID = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*使用者身分證或護照號") },
                 placeholder = { Text(text = "請輸入使用者身分證或護照號") },
             )
-            Disability(
-                selectedKind = { selectedDisable -> disability = selectedDisable },
-                onSaveToFirebase = saveToFirebase
-            )
-            EconomicDropdown (
-                selectedKind = { selectedEconomic -> economic = selectedEconomic },
-                onSaveToFirebase = saveToFirebase
+            TextField(
+                value = disability,
+                onValueChange = { newText -> disability = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*身障資格") },
+                placeholder = { Text("有/無") }
             )
             TextField(
+                value = economic,
+                onValueChange = { newText -> economic = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*經濟別") },
+                placeholder = { Text("一般/低收/中低收/身障") }
+            )
+//            Disability(
+//                selectedKind = { selectedDisable -> disability = selectedDisable },
+//                onSaveToFirebase = saveToFirebase
+//            )
+//            EconomicDropdown (
+//                selectedKind = { selectedEconomic -> economic = selectedEconomic },
+//                onSaveToFirebase = saveToFirebase
+//            )
+            TextField(
                 value = contactName,
-                onValueChange = { newText ->
-                    contactName = newText
-                },
+                onValueChange = { newText -> contactName = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*租借人(聯絡人)姓名") },
                 placeholder = { Text("請輸入您的姓名") }
             )
             TextField(
                 value = contactTel,
-                onValueChange = { newText ->
-                    contactTel = newText
-                },
+                onValueChange = { newText -> contactTel = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*租借人(聯絡人)電話") },
                 placeholder = { Text("請輸入您的電話") }
             )
             TextField(
                 value = contactMail,
-                onValueChange = { newText ->
-                    contactMail = newText
-                },
+                onValueChange = { newText -> contactMail = newText },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text("*租借人(聯絡人)信箱") },
                 placeholder = { Text("請輸入您的信箱") }
@@ -275,8 +285,11 @@ fun Basic(modifier: Modifier) {
                 onClick = {
                     val userInfo = Borrow(
                         userName = userName,
+                        devices = devices,
                         userTel = userTel,
                         userID = userID,
+                        disability = disability,
+                        economic = economic,
                         contactName = contactName,
                         contactTel = contactTel,
                         contactMail = contactMail
@@ -301,8 +314,11 @@ fun Basic(modifier: Modifier) {
 }
 data class Borrow(
     var userName: String,
+    var devices:String,
     var userTel: String,
     var userID:String,
+    var disability:String,
+    var economic:String,
     var contactName:String,
     var contactTel:String,
     var contactMail:String,

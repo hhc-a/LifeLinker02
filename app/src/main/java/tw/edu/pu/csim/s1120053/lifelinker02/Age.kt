@@ -58,49 +58,50 @@ class Age : ComponentActivity() {
         }
     }
 }
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SexDropdown(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val sexOptions = listOf("男", "女")
-    var selectedSex by remember { mutableStateOf(sexOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-        TextField(
-            value = selectedSex,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*性別") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier.menuAnchor().fillMaxWidth()
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            sexOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedSex = option
-                        expanded = false
-                        selectedKind(option)
-                        onSaveToFirebase(option)
-                    }
-                )
-            }
-        }
-    }
-}
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun SexDropdown(
+//    selectedKind: (String) -> Unit,
+//    onSaveToFirebase: (String) -> Unit = {}
+//) {
+//    val sexOptions = listOf("男", "女")
+//    var selectedSex by remember { mutableStateOf(sexOptions.first()) }
+//    var expanded by remember { mutableStateOf(false) }
+//    ExposedDropdownMenuBox(
+//        expanded = expanded,
+//        onExpandedChange = { expanded = !expanded }
+//    ) {
+//        TextField(
+//            value = selectedSex,
+//            onValueChange = {},
+//            readOnly = true,
+//            label = { Text("*性別") },
+//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
+//            modifier = Modifier.menuAnchor().fillMaxWidth()
+//        )
+//
+//        ExposedDropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            sexOptions.forEach { option ->
+//                DropdownMenuItem(
+//                    text = { Text(option) },
+//                    onClick = {
+//                        selectedSex = option
+//                        expanded = false
+//                        selectedKind(option)
+//                        onSaveToFirebase(option)
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
 @Composable  //4進階資料
 fun Age(modifier: Modifier) {
+    var userName by remember { mutableStateOf("") }
     var sex by remember { mutableStateOf("") }
     var age by remember { mutableStateOf("") }
     var height by remember { mutableStateOf("") }
@@ -142,9 +143,23 @@ fun Age(modifier: Modifier) {
                     color = Color.Red
                 )
             )
-            SexDropdown(
-                selectedKind = { selectedSex -> sex = selectedSex },
-                onSaveToFirebase = saveToFirebase
+//            SexDropdown(
+//                selectedKind = { selectedSex -> sex = selectedSex },
+//                onSaveToFirebase = saveToFirebase
+//            )
+            TextField(
+                value = userName,
+                onValueChange = { newText -> userName = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*使用者姓名") },
+                placeholder = { Text("請輸入使用者姓名") }
+            )
+            TextField(
+                value = sex,
+                onValueChange = { newText -> sex = newText },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("*使用者性別") },
+                placeholder = { Text("男/女") }
             )
             TextField(
                 value = age,
@@ -186,6 +201,7 @@ fun Age(modifier: Modifier) {
             TextButton(
                 onClick = {
                     val userAge = sah(
+                        userName = userName,
                         sex = sex,
                         age = age,
                         height = height,
@@ -193,7 +209,7 @@ fun Age(modifier: Modifier) {
 //                        "timestamp" to FieldValue.serverTimestamp()
                     )
                     db.collection("age")
-                        .document(age)
+                        .document(userName)
                         .set(userAge)
                         .addOnSuccessListener { // 成功儲存後的操作
                             val intent = Intent(context, Success::class.java)
@@ -211,6 +227,7 @@ fun Age(modifier: Modifier) {
     }
 }
 data class sah(
+    var userName: String,
     var sex: String,
     var age: String,
     var height:String,

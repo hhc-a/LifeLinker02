@@ -54,11 +54,55 @@ fun Option(modifier: Modifier) {
     )
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
+//            Row {
+//                Column {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.weelchair),
+//                        contentDescription = "輪椅",
+//                        modifier = Modifier
+//                            .size(150.dp)
+//                            .clickable {
+//                                val intent = Intent(context, Info::class.java)
+//                                context.startActivity(intent)
+//                            }
+//                    )
+//                    Text(
+//                        text = "輪椅",
+//                        fontFamily = FontFamily(Font(R.font.round)),
+//                        fontSize = 20.sp,
+//                        color = Color.Black,
+//                        modifier = modifier
+//                            .align(Alignment.CenterHorizontally)
+//                            .offset(y = (-10).dp)
+//                    )
+//                }
+//                Column {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.walkingaid),
+//                        contentDescription = "助行器",
+//                        modifier = Modifier
+//                            .size(150.dp)
+//                            .clickable {
+//                                val intent = Intent(context, Info::class.java)
+//                                context.startActivity(intent)
+//                            }
+//                    )
+//                    Text(
+//                        text = "助行器",
+//                        fontFamily = FontFamily(Font(R.font.round)),
+//                        fontSize = 20.sp,
+//                        color = Color.Black,
+//                        modifier = modifier
+//                            .align(Alignment.CenterHorizontally)
+//                            .offset(y = (-10).dp)
+//                    )
+//                }
+//            }
             Row {
                 Column {
                     Image(
-                        painter = painterResource(id = R.drawable.weelchair),
-                        contentDescription = "輪椅",
+                        painter = painterResource(id = R.drawable.devices),
+                        contentDescription = "輔具借用",
                         modifier = Modifier
                             .size(150.dp)
                             .clickable {
@@ -67,51 +111,7 @@ fun Option(modifier: Modifier) {
                             }
                     )
                     Text(
-                        text = "輪椅",
-                        fontFamily = FontFamily(Font(R.font.round)),
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        modifier = modifier
-                            .align(Alignment.CenterHorizontally)
-                            .offset(y = (-10).dp)
-                    )
-                }
-                Column {
-                    Image(
-                        painter = painterResource(id = R.drawable.walkingaid),
-                        contentDescription = "助行器",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clickable {
-                                val intent = Intent(context, Info::class.java)
-                                context.startActivity(intent)
-                            }
-                    )
-                    Text(
-                        text = "助行器",
-                        fontFamily = FontFamily(Font(R.font.round)),
-                        fontSize = 20.sp,
-                        color = Color.Black,
-                        modifier = modifier
-                            .align(Alignment.CenterHorizontally)
-                            .offset(y = (-10).dp)
-                    )
-                }
-            }
-            Row {
-                Column {
-                    Image(
-                        painter = painterResource(id = R.drawable.crutch),
-                        contentDescription = "拐杖",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clickable {
-                                val intent = Intent(context, Info::class.java)
-                                context.startActivity(intent)
-                            }
-                    )
-                    Text(
-                        text = "拐杖",
+                        text = "輔具借用",
                         fontFamily = FontFamily(Font(R.font.round)),
                         fontSize = 20.sp,
                         color = Color.Black,
@@ -123,7 +123,7 @@ fun Option(modifier: Modifier) {
                 Column {
                     Image(
                         painter = painterResource(id = R.drawable.repair),
-                        contentDescription = "輪椅",
+                        contentDescription = "預約維修",
                         modifier = Modifier
                             .size(150.dp)
                             .clickable {
