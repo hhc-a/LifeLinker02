@@ -200,7 +200,7 @@ fun repair(modifier: Modifier) {
                         .document(userName)
                         .set(repair)
                         .addOnSuccessListener {
-                            val intent = Intent(context, Option()::class.java)
+                            val intent = Intent(context, Success()::class.java)
                             context.startActivity(intent)
                         }
                         .addOnFailureListener { e -> // 處理儲存失敗的情況
