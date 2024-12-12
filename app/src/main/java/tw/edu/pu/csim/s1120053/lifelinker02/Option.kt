@@ -43,7 +43,7 @@ class Option : ComponentActivity() {
         }
     }
 }
-@Composable  //2選項頁
+@Composable  //2選項
 fun Option(modifier: Modifier) {
     val context = LocalContext.current  //取得App的運行環境
     val activity = (context as Activity)  //取得App運行的活動
@@ -54,50 +54,6 @@ fun Option(modifier: Modifier) {
     )
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
-//            Row {
-//                Column {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.weelchair),
-//                        contentDescription = "輪椅",
-//                        modifier = Modifier
-//                            .size(150.dp)
-//                            .clickable {
-//                                val intent = Intent(context, Info::class.java)
-//                                context.startActivity(intent)
-//                            }
-//                    )
-//                    Text(
-//                        text = "輪椅",
-//                        fontFamily = FontFamily(Font(R.font.round)),
-//                        fontSize = 20.sp,
-//                        color = Color.Black,
-//                        modifier = modifier
-//                            .align(Alignment.CenterHorizontally)
-//                            .offset(y = (-10).dp)
-//                    )
-//                }
-//                Column {
-//                    Image(
-//                        painter = painterResource(id = R.drawable.walkingaid),
-//                        contentDescription = "助行器",
-//                        modifier = Modifier
-//                            .size(150.dp)
-//                            .clickable {
-//                                val intent = Intent(context, Info::class.java)
-//                                context.startActivity(intent)
-//                            }
-//                    )
-//                    Text(
-//                        text = "助行器",
-//                        fontFamily = FontFamily(Font(R.font.round)),
-//                        fontSize = 20.sp,
-//                        color = Color.Black,
-//                        modifier = modifier
-//                            .align(Alignment.CenterHorizontally)
-//                            .offset(y = (-10).dp)
-//                    )
-//                }
-//            }
             Row {
                 Column {
                     Image(

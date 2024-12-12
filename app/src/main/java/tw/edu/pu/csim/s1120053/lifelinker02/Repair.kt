@@ -62,48 +62,7 @@ class Repair : ComponentActivity() {
         }
     }
 }
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun kindDropdown(
-//    selectedKind: (String) -> Unit,
-//    onSaveToFirebase: (String) -> Unit = {}
-//) {
-//    val kindOptions = listOf("輪椅", "助行器","拐杖")
-//    var selectedKind by remember { mutableStateOf(kindOptions.first()) }
-//    var expanded by remember { mutableStateOf(false) }
-//    ExposedDropdownMenuBox(
-//        expanded = expanded,
-//        onExpandedChange = { expanded = !expanded }
-//    ) {
-//        TextField(
-//            value = selectedKind,
-//            onValueChange = {},
-//            readOnly = true,
-//            label = { Text("*借用輔具") },
-//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-//            modifier = Modifier.menuAnchor().fillMaxWidth()
-//        )
-//
-//        ExposedDropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            kindOptions.forEach { option ->
-//                DropdownMenuItem(
-//                    text = { Text(option) },
-//                    onClick = {
-//                        selectedKind = option
-//                        expanded = false
-//                        selectedKind(option)
-//                        onSaveToFirebase(option)
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
-@Composable
+@Composable //修復
 fun repair(modifier: Modifier) {
     var userName by remember { mutableStateOf("") }
     var devices by remember { mutableStateOf("") }
@@ -111,19 +70,17 @@ fun repair(modifier: Modifier) {
     var describe by remember { mutableStateOf("") }
     val context = LocalContext.current
     val db = FirebaseFirestore.getInstance()
-//    val activity = (context as Activity)
-//    val user = rep(describe,date)
-    val saveToFirebase: (String) -> Unit = { selectedValue -> // 建立整合 Firebase 儲存的函數
-        val data = hashMapOf( // 準備要儲存的資料
+    val saveToFirebase: (String) -> Unit = { selectedValue ->
+        val data = hashMapOf(
             "sex" to selectedValue,
             "timestamp" to FieldValue.serverTimestamp()
         )
         db.collection("sex_selection")
             .add(data)
-            .addOnSuccessListener { // 成功儲存
+            .addOnSuccessListener {
                 Log.d("Firebase", "Sex selection added with ID: ${it.id}")
             }
-            .addOnFailureListener { e -> // 儲存失敗
+            .addOnFailureListener { e ->
                 Log.w("Firebase", "Error adding sex selection", e)
             }
     }
@@ -133,8 +90,8 @@ fun repair(modifier: Modifier) {
         modifier = Modifier.fillMaxSize()
     )
     Column(
-        modifier = Modifier.fillMaxSize(), // 填滿整個螢幕
-        verticalArrangement = Arrangement.SpaceBetween // 垂直方向分佈
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -147,9 +104,6 @@ fun repair(modifier: Modifier) {
                     color = Color.Red
                 )
             )
-//            kindDropdown(
-//                selectedKind = { selectedKind -> kind = selectedKind },
-//                onSaveToFirebase = saveToFirebase)
             TextField(
                 value = userName,
                 onValueChange = { newText -> userName = newText },
@@ -183,9 +137,17 @@ fun repair(modifier: Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp,end = 16.dp),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Bottom
         ) {
+            TextButton(
+                onClick = {
+                    val intent = Intent(context, Option::class.java)
+                    context.startActivity(intent)
+                }
+            ) {
+                Text(text = "回到主畫面")
+            }
             TextButton(
                 onClick = {
                     val repair = rep(
@@ -193,17 +155,15 @@ fun repair(modifier: Modifier) {
                         devices = devices,
                         describe = describe,
                         date = date,
-//                        "timestamp" to FieldValue.serverTimestamp()
                     )
                     db.collection("repair0")
-//                   .add(user)
                         .document(userName)
                         .set(repair)
                         .addOnSuccessListener {
                             val intent = Intent(context, Success()::class.java)
                             context.startActivity(intent)
                         }
-                        .addOnFailureListener { e -> // 處理儲存失敗的情況
+                        .addOnFailureListener { e ->
                             Toast.makeText(context, "儲存失敗: ${e.message}", Toast.LENGTH_SHORT)
                                 .show()
                         }

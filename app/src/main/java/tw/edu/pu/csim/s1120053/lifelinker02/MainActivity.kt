@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-@Composable  //1logo頁
+@Composable  //1logo
 fun Logo(modifier: Modifier) {
     val context = LocalContext.current
     val activity = (context as Activity)

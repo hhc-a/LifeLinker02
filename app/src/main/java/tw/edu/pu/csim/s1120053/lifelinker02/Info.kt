@@ -55,90 +55,6 @@ class Info : ComponentActivity() {
         }
     }
 }
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun EconomicDropdown(
-//    selectedKind: (String) -> Unit,
-//    onSaveToFirebase: (String) -> Unit = {}
-//) {
-//    val economicOptions = listOf("一般", "低收", "中低收", "身障")
-//    var selectedEconomic by remember { mutableStateOf(economicOptions.first()) }
-//    var expanded by remember { mutableStateOf(false) }
-//    ExposedDropdownMenuBox(
-//        expanded = expanded,
-//        onExpandedChange = { expanded = !expanded },
-//    ) {
-//        TextField(
-//            value = selectedEconomic,
-//            onValueChange = {},
-//            readOnly = true,
-//            label = { Text("*經濟別") },
-//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-//            modifier = Modifier
-//                .menuAnchor()
-//                .fillMaxWidth()
-//        )
-//        ExposedDropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            economicOptions.forEach { option ->
-//                DropdownMenuItem(
-//                    text = { Text(option) },
-//                    onClick = {
-//                        selectedEconomic = option
-//                        expanded = false
-//                        selectedKind(option) // 呼叫傳入的回調函數
-//                        onSaveToFirebase(option)// 儲存到 Firebase
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun Disability(
-//    selectedKind: (String) -> Unit,
-//    onSaveToFirebase: (String) -> Unit = {}
-//) {
-//    val economicOptions = listOf("無證明", "有證明")
-//    var selectedDisable by remember { mutableStateOf(economicOptions.first()) }
-//    var expanded by remember { mutableStateOf(false) }
-//    ExposedDropdownMenuBox(
-//        expanded = expanded,
-//        onExpandedChange = { expanded = !expanded },
-//    ) {
-//        TextField(
-//            value = selectedDisable,
-//            onValueChange = {},
-//            readOnly = true,
-//            label = { Text("*身障資格") },
-//            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-//            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-//            modifier = Modifier
-//                .menuAnchor()
-//                .fillMaxWidth()
-//        )
-//        ExposedDropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            economicOptions.forEach { option ->
-//                DropdownMenuItem(
-//                    text = { Text(option) },
-//                    onClick = {
-//                        selectedDisable = option
-//                        expanded = false
-//                        selectedKind(option) // 呼叫傳入的回調函數
-//                        onSaveToFirebase(option)// 儲存到 Firebase
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
 @Composable  //3基本資料
 fun Basic(modifier: Modifier) {
     var devices by remember { mutableStateOf("") }
@@ -152,24 +68,22 @@ fun Basic(modifier: Modifier) {
     var contactMail by remember { mutableStateOf("") }
     val context = LocalContext.current
     val db = Firebase.firestore
-//    val activity = (context as Activity)
-//    val user = Borrow(userName, userTel, userID, contactName, contactTel, contactMail)
     val saveToFirebase: (String) -> Unit = { selectedValue ->
         val collectionName = when { // 根據不同的下拉式選單儲存到不同的集合
             selectedValue in listOf("一般", "低收", "中低收", "身障") -> "economic_status"
             selectedValue in listOf("無證明", "有證明") -> "disability_status"
             else -> "other_selections"
         }
-        val data = hashMapOf( // 準備要儲存的資料
+        val data = hashMapOf(
             "value" to selectedValue,
             "timestamp" to FieldValue.serverTimestamp()
         )
         db.collection(collectionName)
             .add(data)
-            .addOnSuccessListener { // 成功儲存
+            .addOnSuccessListener {
                 Log.d("Firebase", "Document added with ID: ${it.id}")
             }
-            .addOnFailureListener { e -> // 儲存失敗
+            .addOnFailureListener { e ->
                 Log.w("Firebase", "Error adding document", e)
             }
     }
@@ -179,8 +93,8 @@ fun Basic(modifier: Modifier) {
         modifier = Modifier.fillMaxSize()
     )
     Column(
-        modifier = Modifier.fillMaxSize(), // 填滿整個螢幕
-        verticalArrangement = Arrangement.SpaceBetween // 垂直方向分佈
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -235,14 +149,6 @@ fun Basic(modifier: Modifier) {
                 label = { Text("*經濟別") },
                 placeholder = { Text("一般/低收/中低收/身障") }
             )
-//            Disability(
-//                selectedKind = { selectedDisable -> disability = selectedDisable },
-//                onSaveToFirebase = saveToFirebase
-//            )
-//            EconomicDropdown (
-//                selectedKind = { selectedEconomic -> economic = selectedEconomic },
-//                onSaveToFirebase = saveToFirebase
-//            )
             TextField(
                 value = contactName,
                 onValueChange = { newText -> contactName = newText },
@@ -274,7 +180,6 @@ fun Basic(modifier: Modifier) {
         ) {
             TextButton(
                 onClick = {
-//                    activity.finish()
                     val intent = Intent(context, Option::class.java)
                     context.startActivity(intent)
                 }
@@ -297,11 +202,11 @@ fun Basic(modifier: Modifier) {
                     db.collection("info")
                         .document(userName)
                         .set(userInfo)
-                        .addOnSuccessListener { // 成功儲存後的操作
+                        .addOnSuccessListener {
                             val intent = Intent(context, Age::class.java)
                             context.startActivity(intent)
                         }
-                        .addOnFailureListener { e -> // 處理儲存失敗的情況
+                        .addOnFailureListener { e ->
                             Toast.makeText(context, "儲存失敗: ${e.message}", Toast.LENGTH_SHORT)
                                 .show()
                         }
@@ -323,186 +228,3 @@ data class Borrow(
     var contactTel:String,
     var contactMail:String,
 )
-/*
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EconomicDropdown(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val economicOptions = listOf("一般", "低收", "中低收", "身障")
-    var selectedEconomic by remember { mutableStateOf(economicOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            value = selectedEconomic,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*經濟別") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            economicOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedEconomic = option
-                        expanded = false
-                        // 呼叫傳入的回調函數
-                        selectedKind(option)
-                        // 儲存到 Firebase
-                        onSaveToFirebase(option)
-                    }
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Disability(
-    selectedKind: (String) -> Unit,
-    onSaveToFirebase: (String) -> Unit = {}
-) {
-    val disabilityOptions = listOf("無證明", "有證明")
-    var selectedDisable by remember { mutableStateOf(disabilityOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded },
-    ) {
-        TextField(
-            value = selectedDisable,
-            onValueChange = {},
-            readOnly = true,
-            label = { Text("*身障資格") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            disabilityOptions.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selectedDisable = option
-                        expanded = false
-                        // 呼叫傳入的回調函數
-                        selectedKind(option)
-                        // 儲存到 Firebase
-                        onSaveToFirebase(option)
-                    }
-                )
-            }
-        }
-    }
-}
-
-// 修改 Basic 函數以整合 Firebase 儲存
-@Composable
-fun Basic(modifier: Modifier) {
-    var userName by remember { mutableStateOf("") }
-    var userTel by remember { mutableStateOf("") }
-    var userID by remember { mutableStateOf("") }
-    var disability by remember { mutableStateOf("") }
-    var economic by remember { mutableStateOf("") }
-    var contactName by remember { mutableStateOf("") }
-    var contactTel by remember { mutableStateOf("") }
-    var contactMail by remember { mutableStateOf("") }
-
-    val context = LocalContext.current
-    val db = Firebase.firestore
-
-    // 建立整合 Firebase 儲存的函數
-    val saveToFirebase: (String) -> Unit = { selectedValue ->
-        // 根據不同的下拉式選單儲存到不同的集合
-        val collectionName = when {
-            selectedValue in listOf("一般", "低收", "中低收", "身障") -> "economic_status"
-            selectedValue in listOf("無證明", "有證明") -> "disability_status"
-            else -> "other_selections"
-        }
-
-        // 準備要儲存的資料
-        val data = hashMapOf(
-            "value" to selectedValue,
-            "timestamp" to FieldValue.serverTimestamp()
-        )
-
-        // 新增到 Firebase
-        db.collection(collectionName)
-            .add(data)
-            .addOnSuccessListener {
-                // 成功儲存
-                Log.d("Firebase", "Document added with ID: ${it.id}")
-            }
-            .addOnFailureListener { e ->
-                // 儲存失敗
-                Log.w("Firebase", "Error adding document", e)
-            }
-    }
-
-    // 修改下拉式選項的呼叫方式
-    Column {
-        // ... 其他 TextField 保持不變
-
-        Disability(
-            selectedKind = { selectedDisable -> disability = selectedDisable },
-            onSaveToFirebase = saveToFirebase
-        )
-
-        EconomicDropdown(
-            selectedKind = { selectedEconomic -> economic = selectedEconomic },
-            onSaveToFirebase = saveToFirebase
-        )
-
-        // 送出按鈕時一併儲存所有資料
-        TextButton(
-            onClick = {
-                // 建立完整的使用者資料物件
-                val userInfo = Borrow(
-                    userName = userName,
-                    userTel = userTel,
-                    userID = userID,
-                    contactName = contactName,
-                    contactTel = contactTel,
-                    contactMail = contactMail
-                )
-
-                // 儲存到 Firebase
-                db.collection("info")
-                    .document(userName)
-                    .set(userInfo)
-                    .addOnSuccessListener {
-                        // 成功儲存後的操作
-                        val intent = Intent(context, Age::class.java)
-                        context.startActivity(intent)
-                    }
-                    .addOnFailureListener { e ->
-                        // 處理儲存失敗的情況
-                        Toast.makeText(context, "儲存失敗: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        ) {
-            Text(text = "下一頁")
-        }
-    }
-}
- */
